@@ -53,12 +53,13 @@ app.get('/api/v1/tours', (req, res) => {
 app.get('/api/v1/tours/:id', (req, res) => {
   // console.log(req.params);
   const id = Number(req.params.id);
+  const tour = tours.find((t) => t.id === id);
+
   if (!tour)
     return res.status(404).json({
       status: 'fail',
       messsage: 'Invalid ID',
     });
-  const tour = tours.find((t) => t.id === id);
   console.log(tour);
 
   res.status(200).json({
@@ -87,6 +88,21 @@ app.post('/api/v1/tours', (req, res) => {
   // console.log(req.body);
   // We always need to send back something in order to finish the so-called request/response cycle
   // res.send('Done');
+});
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+  if (Number(req.params.id) > tours.length)
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour: '<Updated tour here…>',
+    },
+  });
 });
 
 const port = 3000;
