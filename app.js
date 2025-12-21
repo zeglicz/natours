@@ -35,9 +35,35 @@ const tours = JSON.parse(
 app.get('/api/v1/tours', (req, res) => {
   res.status(200).json({
     status: 'success',
-    resaults: tours.length,
+    results: tours.length,
     data: { tours },
     // data: { tours: tours },
+  });
+});
+
+// this is exact api url endpoint
+// ? question mark make it optional
+// app.get('/api/v1/tours/:id/:x/:y?', (req, res) => {
+//   console.log(req.params);
+
+//   console.log(req.params);
+//   res.status(200).json({ status: 'success' });
+// });
+
+app.get('/api/v1/tours/:id', (req, res) => {
+  // console.log(req.params);
+  const id = Number(req.params.id);
+  if (!tour)
+    return res.status(404).json({
+      status: 'fail',
+      messsage: 'Invalid ID',
+    });
+  const tour = tours.find((t) => t.id === id);
+  console.log(tour);
+
+  res.status(200).json({
+    status: 'success',
+    data: { tour },
   });
 });
 
