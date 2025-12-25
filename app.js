@@ -16,6 +16,9 @@ app.use(morgan('dev'));
 // In this example is simply that the data from the body is added to it (the request object) by using this middleware
 app.use(express.json());
 
+// Serving static files from a folder (not from a route)
+app.use(express.static(`${__dirname}/public`));
+
 app.use((req, res, next) => {
   console.log('Hello from the middleware');
   // DO NOT forget next()
