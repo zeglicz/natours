@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
+  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 );
 
 exports.checkID = (req, res, next, value) => {
@@ -41,8 +41,8 @@ exports.getAllTours = (req, res) => {
 
 exports.getTour = (req, res) => {
   // console.log(req.params);
-  // const id = Number(req.params.id);
-  // const tour = tours.find((t) => t.id === id);
+  const id = Number(req.params.id);
+  const tour = tours.find((t) => t.id === id);
 
   // if (!tour)
   //   return res.status(404).json({
@@ -59,6 +59,7 @@ exports.getTour = (req, res) => {
 
 exports.createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
+  // eslint-disable-next-line prefer-object-spread
   const newTour = Object.assign({ id: newId }, req.body);
 
   tours.push(newTour);
@@ -71,7 +72,7 @@ exports.createTour = (req, res) => {
         status: 'success',
         data: { tour: newTour },
       });
-    }
+    },
   );
 
   // console.log(req.body);
