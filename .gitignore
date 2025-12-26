@@ -30,3 +30,4 @@ dist-ssr
 .idea/
 .history/
 .env
+config.env
