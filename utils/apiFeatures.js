@@ -1,5 +1,5 @@
 const DEFAULT_PAGE = 1;
-const DEFAULT_LIMIT_PER_PAGE = 5;
+const DEFAULT_LIMIT_PER_PAGE = 100;
 
 class APIFeatures {
   constructor(query, queryString) {

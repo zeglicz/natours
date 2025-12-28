@@ -13,6 +13,7 @@ router
 
 // Aggregation
 router.route('/stats').get(tourController.getTourStats);
+router.route('/monthly-plan/:year').get(tourController.getMothlyPlan);
 
 router
   .route('/')

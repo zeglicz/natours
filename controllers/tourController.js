@@ -209,3 +209,44 @@ exports.getTourStats = async (req, res) => {
     });
   }
 };
+
+exports.getMothlyPlan = async (req, res) => {
+  try {
+    const year = Number(req.params.year);
+
+    const plan = await Tour.aggregate([
+      { $unwind: '$startDates' }, // create single object per dates in array in 'startDates'
+      {
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: '$startDates' },
+          numTourStart: { $sum: 1 },
+          tours: { $push: '$name' },
+        },
+      },
+      { $addFields: { month: '$_id' } },
+      { $project: { _id: 0 } }, // show off
+      { $sort: { numTourStart: -1, month: 1 } },
+      { $limit: 12 }, // limit 12 outputs
+    ]);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        plan,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
