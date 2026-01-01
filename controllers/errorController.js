@@ -5,6 +5,11 @@ const handleCastErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+const handleDuplicateFiledsDB = (err) => {
+  const message = `Duplicate filed value: ${err.keyValue.name}. Please use another value`;
+  return new AppError(message, 400);
+};
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -49,6 +54,7 @@ module.exports = (err, req, res, next) => {
     let error = { ...err };
     // Somehow error don't have name property
     if (err.name === 'CastError') error = handleCastErrorDB(error);
+    if (err.code === 11000) error = handleDuplicateFiledsDB(error);
 
     sendErrorProd(error, res);
   }
