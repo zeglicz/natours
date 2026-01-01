@@ -1,5 +1,15 @@
 const dotenv = require('dotenv');
 
+// Uncaught Exceptions are all errors/bugs that occur in our synchronous code but are not handled anywhere
+process.on('uncaughtException', (err) => {
+  console.log(err.name, err.message);
+  console.log('Uncaught Exception 🎉 Shutting down…');
+
+  process.exit(1); // there is sync error so we can terminate server
+});
+
+// console.log(x); // this is example of that
+
 dotenv.config({ path: './config.env' });
 
 const mongoose = require('mongoose');
@@ -20,7 +30,7 @@ const server = app.listen(PORT, () => {
 
 process.on('unhandledRejection', (err) => {
   console.log(err.name, err.message);
-  console.log('Unhandled Rejection 🎉 Shutting down');
+  console.log('Unhandled Rejection 🎉 Shutting down…');
 
   // Give the server time to finish all the requests
   server.close(() => {
