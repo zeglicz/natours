@@ -21,6 +21,17 @@ const DB = process.env.MONGO_DB.replace(
 );
 
 mongoose.connect(DB).then(() => console.log('DB connection successful!'));
+// mongoose
+//   .connect(DB, {
+//     serverSelectionTimeoutMS: 30000, // 30 sekund zamiast domyślnych 10
+//     socketTimeoutMS: 45000, // 45 sekund
+//   })
+//   .then(() => console.log('DB connection successful!'))
+//   .catch((err) => {
+//     console.error('DB connection error:', err.message);
+//     console.log('Unhandled Rejection 🎉 Shutting down…');
+//     process.exit(1);
+//   });
 
 const PORT = process.env.PORT || 3000;
 
