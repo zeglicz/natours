@@ -43,12 +43,18 @@ const userSchema = new mongoose.Schema({
   passwordResetExpires: Date,
 });
 
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
 
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
   // Don't need next() - mongoose will waits for the promise to resolve
+});
+
+// Update changePasswordAt property for the user
+userSchema.pre('save', async function () {
+  if (!this.isModified('password') || this.isNew) return;
+  this.passwordChangeAt = Date.now() - 1;
 });
 
 userSchema.methods.correctPassword = async function (
