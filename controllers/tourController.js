@@ -28,6 +28,13 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 });
 
 exports.getTour = catchAsync(async (req, res, next) => {
+  // populate/fill up the ids into users info (looks like embedded when we query but inreal it is diffrent) - only in query, NOT in db
+  // populate create a new query, so this might affect performance
+  // const tour = await Tour.findById(req.params.id).populate({
+  //   path: 'guides',
+  //   select: '-__v -passwordChangeAt',
+  // });
+
   const tour = await Tour.findById(req.params.id);
   // shorthand of Tour.findOne({ _id: req.params.id })
 

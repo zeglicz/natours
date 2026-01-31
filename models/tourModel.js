@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-// const User = require('./userModel');
+// const User = require('./userModel'); // embedded
 // const validator = require('validator');
 
 const tourSchema = new mongoose.Schema(
@@ -97,7 +97,7 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
-    // guides: Array,
+    // guides: Array, // embedded
     guides: [
       {
         type: mongoose.Schema.ObjectId,
@@ -130,6 +130,13 @@ tourSchema.pre('save', async function () {
 tourSchema.pre(/^find/, async function () {
   this.find({ secretTour: { $ne: true } }); // $ne - not equal
   this.start = Date.now();
+});
+
+tourSchema.pre(/^find/, async function () {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangeAt',
+  });
 });
 
 // eslint-disable-next-line no-unused-vars
