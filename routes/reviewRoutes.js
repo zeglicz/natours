@@ -2,7 +2,9 @@ const express = require('express');
 const authController = require('../controllers/authController');
 const reviewController = require('../controllers/reviewController');
 
-const router = express.Router();
+// mergeParams gets access to /:tourId - POST /tours/6t34t42fs/reviews
+// without it we have only access to POST /reviews
+const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
