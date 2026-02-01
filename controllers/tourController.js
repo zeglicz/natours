@@ -35,7 +35,9 @@ exports.getTour = catchAsync(async (req, res, next) => {
   //   select: '-__v -passwordChangeAt',
   // });
 
-  const tour = await Tour.findById(req.params.id);
+  // be careful with populate chain
+  const tour = await Tour.findById(req.params.id).populate('reviews');
+  // const tour = await Tour.findById(req.params.id);
   // shorthand of Tour.findOne({ _id: req.params.id })
 
   if (!tour) return next(new AppError('No tour found with that ID', 404));

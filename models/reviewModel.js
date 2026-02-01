@@ -30,15 +30,17 @@ const reviewSchema = new mongoose.Schema(
     },
   },
   {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    toJSON: { virtuals: false },
+    toObject: { virtuals: false },
     versionKey: false, // don't show __v on the output
   },
 );
 
 reviewSchema.pre(/^find/, async function () {
   this.populate({
-    path: ['user', 'tour'],
+    path: 'user',
+    select: 'name',
+    // options: { virtuals: false },
   });
 });
 
