@@ -25,19 +25,6 @@ exports.getAllReviews = catchAsync(async (req, res) => {
   });
 });
 
-exports.createReview = catchAsync(async (req, res) => {
-  // Allow nested routes
-  if (!req.body.tour) req.body.tour = req.params.tourId;
-  if (!req.body.user) req.body.user = req.user.id;
-
-  const newReview = await Review.create(req.body);
-
-  res.status(201).json({
-    status: 'success',
-    review: newReview,
-  });
-});
-
 exports.getReview = catchAsync(async (req, res, next) => {
   const review = await Review.findById(req.params.id);
 
@@ -49,19 +36,14 @@ exports.getReview = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateReview = catchAsync(async (req, res, next) => {
-  // PATCH
-  const review = await Review.findByIdAndUpdate(req.params.id, req.body, {
-    new: true, // return new updated object
-    runValidators: true,
-  });
+exports.setTourUserIds = (req, res, next) => {
+  // Allow nested routes
+  if (!req.body.tour) req.body.tour = req.params.tourId;
+  if (!req.body.user) req.body.user = req.user.id;
 
-  if (!review) return next(new AppError('No review found with that ID', 404));
+  next();
+};
 
-  res.status(200).json({
-    status: 'success',
-    data: { review },
-  });
-});
-
+exports.createReview = factory.createOne(Review);
+exports.updateReview = factory.updateOne(Review);
 exports.deleteReview = factory.deleteOne(Review);
