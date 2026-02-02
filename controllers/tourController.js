@@ -1,9 +1,6 @@
 const Tour = require('../models/tourModel');
 
 const factory = require('./handleFactory');
-
-const APIFeatures = require('../utils/apiFeatures');
-const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
 exports.aliasTopTours = (req, res, next) => {
@@ -13,43 +10,45 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  // EXECUTE THE QUERY
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const tours = await features.query;
+exports.getAllTours = factory.getAll(Tour);
+// exports.getAllTours = catchAsync(async (req, res, next) => {
+//   // EXECUTE THE QUERY
+//   const features = new APIFeatures(Tour.find(), req.query)
+//     .filter()
+//     .sort()
+//     .limitFields()
+//     .paginate();
+//   const tours = await features.query;
 
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: { tours },
-  });
-});
+//   // SEND RESPONSE
+//   res.status(200).json({
+//     status: 'success',
+//     results: tours.length,
+//     data: { tours },
+//   });
+// });
 
-exports.getTour = catchAsync(async (req, res, next) => {
-  // populate/fill up the ids into users info (looks like embedded when we query but inreal it is diffrent) - only in query, NOT in db
-  // populate create a new query, so this might affect performance
-  // const tour = await Tour.findById(req.params.id).populate({
-  //   path: 'guides',
-  //   select: '-__v -passwordChangeAt',
-  // });
+exports.getTour = factory.getOne(Tour, { path: 'reviews' });
+// exports.getTour = catchAsync(async (req, res, next) => {
+//   // populate/fill up the ids into users info (looks like embedded when we query but inreal it is diffrent) - only in query, NOT in db
+//   // populate create a new query, so this might affect performance
+//   // const tour = await Tour.findById(req.params.id).populate({
+//   //   path: 'guides',
+//   //   select: '-__v -passwordChangeAt',
+//   // });
 
-  // be careful with populate chain
-  const tour = await Tour.findById(req.params.id).populate('reviews');
-  // const tour = await Tour.findById(req.params.id);
-  // shorthand of Tour.findOne({ _id: req.params.id })
+//   // be careful with populate chain
+//   const tour = await Tour.findById(req.params.id).populate('reviews');
+//   // const tour = await Tour.findById(req.params.id);
+//   // shorthand of Tour.findOne({ _id: req.params.id })
 
-  if (!tour) return next(new AppError('No tour found with that ID', 404));
+//   if (!tour) return next(new AppError('No tour found with that ID', 404));
 
-  res.status(200).json({
-    status: 'success',
-    data: { tour },
-  });
-});
+//   res.status(200).json({
+//     status: 'success',
+//     data: { tour },
+//   });
+// });
 
 exports.createTour = factory.createOne(Tour);
 // exports.createTour = catchAsync(async (req, res, next) => {
