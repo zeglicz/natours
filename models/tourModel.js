@@ -157,10 +157,12 @@ tourSchema.post(/^find/, async function (doc) {
   console.log(`Query took ${Date.now() - this.start} milliseconds`);
 });
 
-// Aggregation Middleware
-tourSchema.pre('aggregate', async function () {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } }); // exclude secret tours from aggregation
-});
+// // Aggregation Middleware
+// tourSchema.pre('aggregate', async function () {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } }); // exclude secret tours from aggregation
+
+//   console.log(this.pipeline());
+// });
 
 const Tour = mongoose.model('Tour', tourSchema);
 
