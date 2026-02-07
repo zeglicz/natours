@@ -20,6 +20,7 @@
   "homepage": "https://github.com/zeglicz/natours-api#readme",
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "express": "^4.22.1",
     "express-mongo-sanitize": "^2.2.0",
