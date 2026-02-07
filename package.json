@@ -6,7 +6,9 @@
   "scripts": {
     "start:dev": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
+    "build:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,8 @@
   },
   "homepage": "https://github.com/zeglicz/natours-api#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "axios": "^0.18.1",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
@@ -46,6 +50,7 @@
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
     "nodemon": "^3.1.11",
+    "parcel-bundler": "^1.12.5",
     "prettier": "^3.7.4"
   }
 }
