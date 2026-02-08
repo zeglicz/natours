@@ -24,7 +24,13 @@ const handleJWTError = () =>
 const handleJWTExpiredError = () =>
   new AppError('Your token has expired. Please log in again', 401);
 
-const sendErrorDev = (err, res) => {
+const sendErrorDev = (err, req, res) => {
+  if (!req.originalUrl.startsWith('/api'))
+    return res.status(err.statusCode).render('error', {
+      title: 'Something went wrong!',
+      msg: err.message,
+    });
+
   res.status(err.statusCode).json({
     status: err.status,
     err: err,
@@ -33,25 +39,28 @@ const sendErrorDev = (err, res) => {
   });
 };
 
-const sendErrorProd = (err, res) => {
-  // Operational, if trusted error - send message to client
-  if (err.isOperational) {
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message,
-    });
+const sendErrorProd = (err, req, res) => {
+  const isApi = req.originalUrl.startsWith('/api');
 
-    // Programming or other unknown error - don't leak error details
-  } else {
-    // 1. Log error
-    console.error('ERROR: ', err);
+  // Operational = trusted, safe to show message. Else: log and send generic.
+  const statusCode = err.isOperational ? err.statusCode : 500;
+  const message = err.isOperational
+    ? err.message
+    : 'Something went very wrong!';
 
-    // 2. Send generic msg
-    res.status(500).json({
-      status: 'error',
-      message: 'Something went very wrong!',
+  if (!err.isOperational) console.error('ERROR:', err);
+
+  if (isApi) {
+    return res.status(statusCode).json({
+      status: err.isOperational ? err.status : 'error',
+      message,
     });
   }
+
+  return res.status(statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: message,
+  });
 };
 
 module.exports = (err, req, res, next) => {
@@ -62,10 +71,11 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDev(err, res);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     // eslint-disable-next-line node/no-unsupported-features/es-syntax
     let error = { ...err };
+    error.message = err.message;
     // Somehow error don't have name property
     if (err.name === 'CastError') error = handleCastErrorDB(error);
     if (err.code === 11000) error = handleDuplicateFiledsDB(error);
@@ -73,6 +83,6 @@ module.exports = (err, req, res, next) => {
     if (err.name === 'JsonWebTokenError') error = handleJWTError(error);
     if (err.name === 'TokenExpiredError') error = handleJWTExpiredError(error);
 
-    sendErrorProd(error, res);
+    sendErrorProd(error, req, res);
   }
 };
