@@ -63,10 +63,9 @@ userSchema.pre('save', async function () {
   this.passwordChangeAt = Date.now() - 1;
 });
 
-// Hide unactive users for every query startsWith 'find'
-userSchema.pre(/^find/, async function () {
-  // this points to current query
-  this.find({ active: { $ne: true } });
+// Hide inactive users for every query that starts with 'find'
+userSchema.pre(/^find/, function () {
+  this.find({ active: { $ne: false } });
 });
 
 userSchema.methods.correctPassword = async function (
