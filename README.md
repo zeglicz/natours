@@ -2,7 +2,7 @@
 
 REST API and server-rendered site (Pug) for the fictional tour company Natours. Users browse tours, log in, book tours via Stripe, manage their account and profile photo. Email sending (welcome, password reset), upload of user photos and tour images with processing (Sharp). Admin panel: tours, users, bookings, statistics.
 
-This project is based on [_Node.js, Express, MongoDB & More: The Complete Bootcamp 2024_](https://www.udemy.com/course/nodejs-express-mongodb-bootcamp/) by Jonas Schmedtmann. Educational repository – not intended for production use.
+This project is based on [_Node.js, Express, MongoDB & More: The Complete Bootcamp_](https://www.udemy.com/course/nodejs-express-mongodb-bootcamp/) by Jonas Schmedtmann. Educational repository – not intended for production use.
 
 ## Demo
 
