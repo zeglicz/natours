@@ -49,3 +49,10 @@ process.on('unhandledRejection', (err) => {
   });
   // In real life - Restart server now
 });
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM RECEIVED. Shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated!');
+  });
+});
